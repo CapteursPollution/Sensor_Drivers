@@ -1,0 +1,29 @@
+Instructions pour installation du logiciel sur Raspberry Pi
+
+Packages à télécharger :
+	sudo apt-get install apache2 php php-mbstring hostapd dnsmasq mysql-server php-mysql
+	sudo chmod -R 770 /var/www/html/
+
+Ajouter dans /etc/dhcpcd.conf :
+	interface wlan0
+	static ip_address=192.168.4.1/24
+	static routers=192.168.4.1
+
+Modifier /etc/dnsmasq.conf :
+	interface=wlan0
+	dhcp-range=192.168.4.8,192.168.4.250,24h
+
+Ajouter à /etc/default/hostapd :
+DAEMON_CONF="/etc/hostapd/hostapd.conf"
+
+
+Executer  
+
+
+
+NOT DONE :
+
+Créer utilisateurs != de pi(raspberry), dont éventuellement root
+
+Ajouter dans /etc/apache/apache2.conf pour empécher un warning.
+	ServerName 192.168.4.1	

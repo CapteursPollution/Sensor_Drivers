@@ -1,0 +1,34 @@
+Instructions on how to configure your Raspberry Pi as a database and web server
+
+Packages to download :
+	sudo apt-get install apache2 php php-mbstring hostapd dnsmasq mysql-server php-mysql
+	sudo chmod -R 770 /var/www/html/
+
+Add to /etc/dhcpcd.conf :
+	interface wlan0
+	static ip_address=192.168.4.1/24
+	static routers=192.168.4.1
+
+Uncomment and change in /etc/dnsmasq.conf :
+	interface=wlan0
+	dhcp-range=192.168.4.8,192.168.4.250,24h
+
+Add to /etc/default/hostapd :
+DAEMON_CONF="/etc/hostapd/hostapd.conf"
+
+
+
+
+
+
+NOT DONE (Should do ?):
+
+Run mysql_secure_installation
+
+Change the raspberry default user (or only its passwd), and/or create new ones.
+
+Setup SSHkey authentification and ufw (firewall) to improve security
+>See digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-16-04
+
+Add to /etc/apache/apache2.conf to prevent 1 warning to popup
+	ServerName 192.168.4.1	
