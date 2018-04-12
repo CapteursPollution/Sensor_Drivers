@@ -198,6 +198,25 @@ class _PipeReader(Thread):
                 time.sleep(PROCESS_POLLING_INTERVAL)
 
 
+class package():
+    def __init__(self, name, version):
+        self.name = name
+        self.version = version
+
+    # main method, checks, asks user, download and install the package
+    def install():
+        if(name and version)
+            _apt_install()
+
+    #TODO : Check if the package and the right version is installed
+    def check_installation():
+        cmd = ""
+    
+    # Apt interface to perform the installation
+    def _apt_install():
+        cmd = ["apt-get", "install", name] #TODO
+
+
 class Installer():
      #TODO: add config option
     def _init_(self):
@@ -207,8 +226,8 @@ class Installer():
         """Installation Logic
         """
         logger.debug('Identified Platform: {0}'.format(PLATFORM))
-        logger.debug('Identified Distribution: {0}'.format(self.distro))
-        logger.debug('Identified Release: {0}'.format(self.release))
+        logger.debug('Identified Distribution: {0}'.format(DISTRIBUTION))
+        logger.debug('Identified Release: {0}'.format(RELEASE))
 
 
 
