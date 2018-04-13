@@ -15,7 +15,7 @@ char pass[] = "pollution";       // your SSID Password
 WiFiClient client;            // Use this for WiFi instead of EthernetClient
 MySQL_Connection conn((Client *)&client);
 
-String Date = "2018-04-10 17:50:00";
+String Datetime;
 
 // query
 char INSERT_SQL_ComPM[200];
@@ -61,6 +61,15 @@ void setup() {
 
   delay(1000);
   digitalWrite(PMS5003_SET_PIN,HIGH);
+
+      // wait 40s for PMS5003 to warm up
+//  for (int i = 1; i <= 40; i++)
+//  {
+//    delay(1000); // 1s
+//    Serial.print(i);
+//    Serial.println(" s (wait 40s for DSM501 to warm up)");
+//  }
+  
 }
 
 struct pms5003data {
@@ -83,11 +92,24 @@ void loop() {
     comp ++;
     if (comp >=10)
     {
+
+      if (client.connect(server_addr, 80)) {
+        Serial.println("connected to server");
+        // Make a HTTP request:
+        client.println("GET /date.php HTTP/1.1");
+      }
+    
+      while (client.available()) {
+        Datetime = client.read();
+        Serial.println(Datetime);
+      }
+      
       pm10_moy = (float) pm10_sum/comp;
       pm25_moy = (float) pm25_sum/comp;
       pm100_moy = (float) pm100_sum/comp;
 
-      sprintf(INSERT_SQL_ComPM,"INSERT INTO capteur_multi_pollution.Concentration_pm (date_mesure,pm2_5,pm10) VALUES(\'%s\', \'%.2f\', \'%.2f\')",Date.c_str(),pm25_moy,pm100_moy);
+      
+      sprintf(INSERT_SQL_ComPM,"INSERT INTO capteur_multi_pollution.Concentration_pm (date_mesure,pm2_5,pm10) VALUES(\'%s\', \'%.2f\', \'%.2f\')",Datetime.c_str(),pm25_moy,pm100_moy);
 
       // Initiate the query class instance
       MySQL_Cursor *cur_mem = new MySQL_Cursor(&conn);
@@ -96,7 +118,7 @@ void loop() {
       // Note: since there are no results, we do not need to read any data
       // Deleting the cursor also frees up memory used
       delete cur_mem;
-      
+
       Serial.println("Concentration Units Mean (environmental)");
       Serial.print("PM 1.0: "); Serial.print(pm10_moy);
       Serial.print("\t\tPM 2.5: "); Serial.print(pm25_moy);

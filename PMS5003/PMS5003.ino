@@ -6,7 +6,15 @@ void setup() {
   pinMode(PMS5003_SET_PIN, OUTPUT);
 
   digitalWrite(PMS5003_SET_PIN,LOW);
-  delay(1000);
+  
+    // wait 40s for PMS5003 to warm up
+  for (int i = 1; i <= 40; i++)
+  {
+    delay(1000); // 1s
+    Serial.print(i);
+    Serial.println(" s (wait 40s for DSM501 to warm up)");
+  }
+  
   digitalWrite(PMS5003_SET_PIN,HIGH);
 }
 
